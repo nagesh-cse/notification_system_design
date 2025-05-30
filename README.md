@@ -8,9 +8,9 @@ This project demonstrates a real-time notification system with a backend queuing
 
 - Real-time notifications via WebSockets
 - Like batching system with Redis Sets
-- Batched notifications sent every 10 seconds
+- Batched notifications sent every 20 seconds
 - MongoDB persistence for historical notifications
-- React frontend with simulated user selection
+- React frontend with simulated user selection (Fake Authentication for 3 Users for demonstration purpose)
 - Manual Redis cleanup (no expire()) to avoid notification loss
 
 ---
@@ -33,8 +33,8 @@ This project demonstrates a real-time notification system with a backend queuing
 
 ### 📁 1. Clone the Repo
 ```bash
-git clone https://github.com/your-username/notification-system-poc.git
-cd notification-system-poc
+git clone https://github.com/nagesh-cse/notification_system_design.git
+cd notification_system_design
 ```
 
 ### ⚙️ 2. Configure Environment Variables
@@ -43,12 +43,9 @@ cd notification-system-poc
 ```
 MONGO_URI=mongodb+srv://your_user:your_pass@cluster.mongodb.net/notifications?retryWrites=true&w=majority
 REDIS_URL=rediss://default:<password>@<host>.upstash.io:6379
+PORT=1234
 ```
 
-#### Frontend `.env`
-```
-VITE_BACKEND_URL=http://localhost:3000
-```
 
 ### 📦 3. Install Dependencies
 
@@ -69,7 +66,7 @@ npm install
 In one terminal:
 ```bash
 cd backend
-node server.js
+npm run dev
 ```
 
 In another terminal:
@@ -94,7 +91,7 @@ Open: [http://localhost:5173](http://localhost:5173)
 2. The client joins a Socket.IO room (`join(userId)`)
 3. When another user likes a post:
    - The like is stored in a Redis Set
-   - A delayed job is scheduled via BullMQ (10s window)
+   - A delayed job is scheduled via BullMQ (20s window)
 4. The worker reads from the Redis Set, groups users, sends one notification
 5. Notification is:
    - Saved in MongoDB
@@ -106,7 +103,7 @@ Open: [http://localhost:5173](http://localhost:5173)
 
 - Redis Set: `likes:<to_user>:<post_id>`
 - Likes are added to the set on `/like`
-- If no job exists, one is scheduled (delay: 10s)
+- If no job exists, one is scheduled (delay: 20s)
 - After job runs, it deletes the set manually
 - New like after that triggers a fresh batch job
 
@@ -127,6 +124,5 @@ Open: [http://localhost:5173](http://localhost:5173)
 
 ---
 
-## 📄 License
-MIT — use freely and modify as needed!
+
 

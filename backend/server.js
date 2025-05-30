@@ -59,7 +59,7 @@ app.post('/like', async (req, res) => {
       { to_user, post_id },
       {
         jobId: batchJobId,
-        delay: 10000,
+        delay: 20000,
       }
     );
 
